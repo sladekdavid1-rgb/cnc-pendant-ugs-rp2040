@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.1 – 2026-10-19
+
+- Oprava firmwaru (v11.1 a v10.1): HOME, RTZ, PROBE a NULA X/Y/Z fungují i bez zvolené osy. Zvolená osa je potřeba jen pro pojezd (šipky a enkodér). Dřív tato tlačítka bez zvolené osy nereagovala.
+
 ## v1.0 – 2026-10-19
 
 První kompletní verze, postavená a odzkoušená.

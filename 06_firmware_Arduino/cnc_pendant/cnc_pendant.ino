@@ -1,5 +1,5 @@
 /*
-  CNC pendant pro UGS (Universal Gcode Sender) + GRBL 1.1      verze 10
+  CNC pendant pro UGS (Universal Gcode Sender) + GRBL 1.1      verze 10.1
   RP2040 (Laskakit Ultimate Pi Pico / Pico) jako USB klávesnice (zkratky F13–F24 v UGS)
 
   - 21 tlačítek v matici 3 × 7 (dioda 1N4148W u každého,
@@ -291,12 +291,12 @@ void onPress(Act a) {
     case A_SEL_Z:   axis = (axis == 3) ? 0 : 3; stopAllMotion(); break;
     case A_FEED_DN: setFeedLevel(stepDown(feedLevel, feedSynced)); break;
     case A_FEED_UP: setFeedLevel(stepUp(feedLevel, feedSynced, FEED_LEVELS)); break;
-    case A_ZERO_X:  if (unlocked) qPush(KS_ZERO_X, SHIFT);  break;
-    case A_ZERO_Y:  if (unlocked) qPush(KS_ZERO_Y, SHIFT);  break;
-    case A_ZERO_Z:  if (unlocked) qPush(KS_ZERO_Z, SHIFT);  break;
-    case A_PROBE:   if (unlocked) qPush(KS_PROBE, SHIFT);   break;
-    case A_HOME:    if (unlocked) qPush(KS_HOME, SHIFT);    break;
-    case A_RTZ:     if (unlocked) qPush(KS_RTZ, SHIFT);     break;
+    case A_ZERO_X:  qPush(KS_ZERO_X, SHIFT);  break;
+    case A_ZERO_Y:  qPush(KS_ZERO_Y, SHIFT);  break;
+    case A_ZERO_Z:  qPush(KS_ZERO_Z, SHIFT);  break;
+    case A_PROBE:   qPush(KS_PROBE, SHIFT);   break;
+    case A_HOME:    qPush(KS_HOME, SHIFT);    break;
+    case A_RTZ:     qPush(KS_RTZ, SHIFT);     break;
     default: break;
   }
 }

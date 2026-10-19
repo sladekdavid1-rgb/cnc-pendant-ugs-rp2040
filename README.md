@@ -25,7 +25,7 @@ an aluminium front panel engraved with a diode laser, and a 3D-printed enclosure
 - 19 LEDs via 3× 74HC595: selected axis, XY step (0.05 / 0.1 / 1 / 10 / 50 / 100 mm),
   Z step (0.05 / 0.1 / 1 / 10 mm), jog feed (10 / 100 / 1k / 2k / 3k / MAX mm/min)
 - Step and feed are set in UGS **absolutely**, so the LEDs always match UGS
-- Safety: START, HOME, RTZ, PROBE and ZERO require a **0.5 s hold**; axis must be selected (locked otherwise);
+- Safety: START, HOME, RTZ, PROBE and ZERO require a **0.5 s hold**; jogging (arrows, encoder) is locked until an axis is selected – all other buttons always work;
   STOP and HOLD jump the key queue and discard pending jog steps
 - Tap = one step, hold = continuous jog, **X + Y pressed together = diagonal jog**
 - LEDs dim after 2 minutes idle (PWM on 595 OE); built-in **test mode** (hold STOP while plugging in)

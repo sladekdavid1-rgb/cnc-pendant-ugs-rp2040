@@ -1,5 +1,5 @@
 /*
-  CNC pendant pro UGS (Universal Gcode Sender) + GRBL 1.1      verze 11
+  CNC pendant pro UGS (Universal Gcode Sender) + GRBL 1.1      verze 11.1
   RP2040 (Laskakit Ultimate Pi Pico / Pico) jako USB klávesnice (zkratky F13–F24 v UGS)
 
   Novinky proti verzi 10:
@@ -18,7 +18,9 @@
    6) TESTOVACÍ REŽIM – drž STOP při připojení USB: nic se neposílá do PC,
       do Serial Monitoru (115200) se vypisují tlačítka a enkodér, držené tlačítko
       rozsvítí všechny LED, enkodér posouvá jednu LED. Konec = odpojit USB.
-   Když tlačítko potřebuje zvolenou osu a žádná zvolená není, LED os 3× bliknou.
+   Zvolená osa je potřeba jen pro pojezd (šipky, enkodér). Když se zmáčkne šipka bez zvolené
+   osy, LED os 3× bliknou. HOME, RTZ, PROBE, NULA X/Y/Z, START, HOLD, STOP a UNLOCK fungují
+   vždy (v11.1 – dřív HOME/RTZ/PROBE/NULA chtěly zvolenou osu, což byla chyba).
 
   Zkratky v UGS (nové jsou jen diagonály):
     F13/F14 X+/X-  F15/F16 Y+/Y-  F17/F18 Z+/Z-  F21 Pause  F22 Start  F23 Stop  F24 Unlock
@@ -239,8 +241,7 @@ bool isConfirm(Act a) {
 bool confirmWaiting() {                  // drží se tlačítko s pojistkou, ještě neproběhlo
   for (uint8_t r = 0; r < 3; r++)
     for (uint8_t c = 0; c < 7; c++)
-      if (keyStable[r][c] && !keyFired[r][c] && isConfirm(KEYMAP[r][c]) &&
-          (axis != 0 || KEYMAP[r][c] == A_START)) return true;
+      if (keyStable[r][c] && !keyFired[r][c] && isConfirm(KEYMAP[r][c])) return true;
   return false;
 }
 
@@ -405,10 +406,7 @@ void onPress(Act a, uint32_t now) {
     }
     return;
   }
-  if (isConfirm(a)) {                               // provede se až po podržení (loop)
-    if (a != A_START && !unlocked) hintUntil = now + 900;
-    return;
-  }
+  if (isConfirm(a)) return;                         // provede se až po podržení (loop), osa není potřeba
   switch (a) {
     case A_HOLD:    releaseHeld(); jogPend = jogPend2 = A_NONE; qDropJogs(); qPushFront(K_HOLD, NOMOD); break;
     case A_STOP:    stopAllMotion(); qPushFront(K_STOP, NOMOD); stopBlinkUntil = now + STOP_BLINK_MS; break;
@@ -466,7 +464,6 @@ void checkConfirm(uint32_t now) {
     for (uint8_t c = 0; c < 7; c++) {
       Act a = KEYMAP[r][c];
       if (!keyStable[r][c] || keyFired[r][c] || !isConfirm(a)) continue;
-      if (a != A_START && axis == 0) continue;
       if (now - keyPressedAt[r][c] >= CONFIRM_MS) { keyFired[r][c] = true; activity(now); doConfirmed(a); }
     }
 }
