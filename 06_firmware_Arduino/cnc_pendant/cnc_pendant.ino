@@ -65,7 +65,7 @@ const uint8_t KC_Z_PLUS   = KEY_F23;   // Z step + (pod 0.1 mm po 0.01)
 
 // ---------------- Nastavení ----------------
 const uint8_t  EDGES_PER_DETENT = 4;     // EC11/KY-040 obvykle 4, některé 2
-const bool     ENC_INVERT       = false;
+const bool     ENC_INVERT       = true;    // směr otáčení enkodéru (true = obráceně – nastaveno podle hotového kusu; když jede opačně, dej false)
 const uint16_t TAP_HOLD_MS      = 30;    // délka ťuknutí (UGS: < 500 ms = krok)
 const uint16_t TAP_GAP_MS       = 30;    // mezera mezi ťuknutími ve frontě
 const uint16_t ENC_GAP_MS       = 60;    // min. rozestup kroků z enkodéru

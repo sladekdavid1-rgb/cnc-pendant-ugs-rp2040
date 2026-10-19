@@ -75,7 +75,7 @@ const uint8_t KD_XP_YP = KEY_F13, KD_XP_YM = KEY_F14, KD_XM_YP = KEY_F15, KD_XM_
 
 // ---------------- Nastavení ----------------
 const uint8_t  EDGES_PER_DETENT = 4;
-const bool     ENC_INVERT       = false;
+const bool     ENC_INVERT       = true;    // směr otáčení enkodéru (true = obráceně – nastaveno podle hotového kusu; když jede opačně, dej false)
 const uint16_t TAP_HOLD_MS      = 30;
 const uint16_t TAP_GAP_MS       = 30;
 const uint16_t ENC_GAP_MS       = 60;
