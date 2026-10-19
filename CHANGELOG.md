@@ -2,7 +2,7 @@
 
 ## v1.0.1 – 2026-10-19
 
-- Směr enkodéru nastavený podle hotového kusu: `ENC_INVERT = true` (Y, Z, rychlost) a `ENC_AXIS_FLIP` pro osu X – směr jde nastavit zvlášť pro každou osu.
+- Směr enkodéru nastavený podle hotového kusu (`ENC_INVERT`, `ENC_AXIS_FLIP` – směr jde nastavit zvlášť pro každou osu).
 - Oprava firmwaru (v11.1 a v10.1): HOME, RTZ, PROBE a NULA X/Y/Z fungují i bez zvolené osy. Zvolená osa je potřeba jen pro pojezd (šipky a enkodér). Dřív tato tlačítka bez zvolené osy nereagovala.
 
 ## v1.0 – 2026-10-19
