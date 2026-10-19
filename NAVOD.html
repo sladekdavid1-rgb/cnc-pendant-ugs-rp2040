@@ -43,7 +43,7 @@ a{color:var(--acc2)}
 <body><main>
 
 <h1>CNC pendant pro UGS / GRBL – kompletní návod</h1>
-<p class="sub">Ruční ovladač k frézce Lunyee 3018 Pro Ultra: 21 tlačítek, enkodér, 19 LED, USB klávesnice (RP2040). Výroba DPS frézováním, panel z hliníku pálený laserem, krabička 3D tisk.<br>Stav balíku: 19. 10. 2026</p>
+<p class="sub">Ruční ovladač k frézce Lunyee 3018 Pro Ultra: 21 tlačítek, enkodér, 19 LED, USB klávesnice (RP2040). Výroba DPS frézováním, panel z hliníku pálený laserem, krabička 3D tisk.<br>Stav balíku: 19. 10. 2026 (kontrola DPS proti KiCadu)</p>
 
 <div class="grid">
 <figure><img src="00_obrazky/sestava_iso.png" alt="Sestava"><figcaption>Sestava (model krabičky)</figcaption></figure>
@@ -71,7 +71,7 @@ a{color:var(--acc2)}
 <h2 id="mapa">1. Co je v balíku</h2>
 <table>
 <tr><th>Složka</th><th>Obsah</th></tr>
-<tr><td class="f">00_obrazky</td><td>Náhledy sestavy, rozmístění a routování desek.</td></tr>
+<tr><td class="f">00_obrazky</td><td>Náhledy sestavy a desek (měď, rozmístění) vykreslené z aktuálních souborů KiCad.</td></tr>
 <tr><td class="f">01_DPS_KiCad</td><td>Projekty KiCad 10 všech tří desek (schéma, DPS, vlastní knihovny <span class="f">pendant.pretty</span>, interaktivní BOM desky B).</td></tr>
 <tr><td class="f">02_DPS_frezovani</td><td>G-kódy z FlatCAMu pro desky A, B, C seřazené podle postupu (A1…A6, B1…B4, C1…C3), gerbery, projekty FlatCAM, výškové mapy z Candle, starší verze.</td></tr>
 <tr><td class="f">03_pripravek_MDF</td><td>Výkres přípravku (DXF), G-kódy na jeho výrobu (Fusion) a program na vrtání rohových děr desky A.</td></tr>
@@ -200,21 +200,39 @@ a{color:var(--acc2)}
 </table>
 <p>Deska C je jednovrstvá bez propojek. LED a odpory R301–R304 (0603) jsou na straně mědi, která míří k panelu.</p>
 
+<h3>Náhledy desek (vykresleno z aktuálních souborů KiCad)</h3>
+<figure><img src="00_obrazky/DPS_A_obe_vrstvy.png" alt=""><figcaption>Deska A – obě vrstvy, pohled shora</figcaption></figure>
 <div class="grid">
-<figure><img src="00_obrazky/routovani_A.png" alt=""><figcaption>Deska A – routování</figcaption></figure>
-<figure><img src="00_obrazky/routovani_B.png" alt=""><figcaption>Deska B – routování</figcaption></figure>
-<figure><img src="00_obrazky/routovani_C_1vrstva.png" alt=""><figcaption>Deska C – jedna vrstva</figcaption></figure>
+<figure><img src="00_obrazky/DPS_A_horni_med.png" alt=""><figcaption>Deska A – horní měď (A2)</figcaption></figure>
+<figure><img src="00_obrazky/DPS_A_spodni_med.png" alt=""><figcaption>Deska A – spodní měď, prosvícená shora (A1 ji frézuje zrcadlově)</figcaption></figure>
+<figure><img src="00_obrazky/DPS_B_med.png" alt=""><figcaption>Deska B – měď, prosvícená shora (B2 ji frézuje zrcadlově)</figcaption></figure>
+<figure><img src="00_obrazky/DPS_C_med.png" alt=""><figcaption>Deska C – měď</figcaption></figure>
 </div>
+
+<h3>Kontrola podkladů</h3>
+<div class="box ok">Všechny tři desky jsem zkontroloval proti aktuálním souborům KiCad (podrobně v <span class="f">KONTROLA_DPS.md</span>):
+<ul>
+<li>schéma ↔ DPS: stejné součástky, hodnoty, pouzdra i sítě; žádná nepropojená síť, žádný zkrat, žádná mezera mědi pod 0,2 mm,</li>
+<li>gerbery v <span class="f">gerber/</span> odpovídají DPS (všechny cesty i pady),</li>
+<li>simulace izolace: G-kódy A1+A2, B2 a C1 oddělí každou síť a žádnou nepřeruší (žádný zkrat, žádné přerušení), zasahují jen do okraje zemní plochy,</li>
+<li>vrtání: všech 37 + 120 + 4 děr desky A, 61 + 4 desky B a 20 desky C sedí přesně na DPS,</li>
+<li>ořezy jdou fréza 1,8 mm 1,05 mm od obrysu (deska vyjde o ~0,15 mm na každé straně větší – nevadí), kapsa Ø10 sedí na enkodér.</li>
+</ul></div>
 
 <!-- ============================================================ -->
 <h2 id="osazeni">5. Osazení a pájení</h2>
 <h3>Postup</h3>
 <ol>
-<li><b>A:</b> nejdřív drátky do průchodů (obě strany), pak SMD – 3× 74HC595 (U4–U6), 21× dioda 1N4148W (orientace!), C40–C43, R50. Pak lišty J1–J4 a nakonec 21 tlačítek. Vývody s cestou nahoře pájej i shora.</li>
+<li><b>A:</b> nejdřív drátky do 37 průchodů (obě strany), pak SMD – 3× 74HC595 (U4–U6), 21× dioda 1N4148W (orientace!), C40–C43, R50 – ty jsou na <b>spodní</b> straně. Pak lišty J1–J4 a nakonec 21 tlačítek.<br><b>Pájet i shora</b> (vede k nim cesta po horní straně): vývod 2 všech tlačítek (u SW1, SW9, SW10, SW16, SW17 oba vývody 2), J1 pin 6, J2 piny 2 a 4–10, J3 piny 1, 2, 5, 6 a J4 piny 1, 2, 6, 7.</li>
 <li><b>C:</b> 19 LED (pozor na polaritu), R301 = 330 Ω (osy), R302–R304 = 820 Ω, lišty J301 (1×12 s vytaženými piny 2 a 6) a J302 (1×10).</li>
 <li><b>B:</b> SMD (7× 10k R102–R108, 10n, 100n, 10u), dutinkové lišty J101 a J103, enkodér EC11, Pico (Laskakit Ultimate Pi Pico).</li>
 <li>Před spojením desek změř multimetrem zkraty 3V3–GND a spojitost signálů na lištách.</li>
 </ol>
+<div class="grid">
+<figure><img src="00_obrazky/DPS_A_rozmisteni.png" alt=""><figcaption>Deska A – rozmístění (modře součástky na spodní straně)</figcaption></figure>
+<figure><img src="00_obrazky/DPS_B_rozmisteni.png" alt=""><figcaption>Deska B – rozmístění</figcaption></figure>
+<figure><img src="00_obrazky/DPS_C_rozmisteni.png" alt=""><figcaption>Deska C – rozmístění</figcaption></figure>
+</div>
 <h3>Propojení desek</h3>
 <table>
 <tr><th>A ↔ B</th><th>Piny</th></tr>

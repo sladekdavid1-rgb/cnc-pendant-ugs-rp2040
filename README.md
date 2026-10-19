@@ -45,11 +45,21 @@ Panel 95 × 65 mm, M3 mounting holes on an 88 × 58 mm grid. Full BOM: [`08_soup
 | Encoder SW / B / A | GP13 / GP14 / GP15 |
 | 74HC595 SER / SRCLK / RCLK / OE | GP18 / GP19 / GP20 / GP21 (OE = PWM brightness) |
 
+## Boards
+
+![Board A](00_obrazky/DPS_A_obe_vrstvy.png)
+
+| ![A top](00_obrazky/DPS_A_horni_med.png) | ![B](00_obrazky/DPS_B_med.png) | ![C](00_obrazky/DPS_C_med.png) |
+|---|---|---|
+| A – top copper | B – copper (seen from top) | C – LED board |
+
+All boards were cross-checked against the KiCad files (schematic ↔ PCB, Gerbers, isolation G-code simulation, drills, outlines) – see [`KONTROLA_DPS.md`](KONTROLA_DPS.md).
+
 ## Repository layout
 
 | Folder | Contents |
 |---|---|
-| `00_obrazky` | renders, PCB layout images |
+| `00_obrazky` | renders, PCB copper and placement images (generated from the KiCad files) |
 | `01_DPS_KiCad` | KiCad 10 projects of boards A, B, C (+ custom footprints, iBOM) |
 | `02_DPS_frezovani` | FlatCAM G-code in machining order (A1–A6, B1–B4, C1–C3), Gerbers, FlatCAM projects, Candle height maps |
 | `03_pripravek_MDF` | MDF registration jig (DXF + Fusion G-code), 4 × Ø2.5 mm pins on 88 × 58 mm |
