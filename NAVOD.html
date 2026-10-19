@@ -45,8 +45,9 @@ a{color:var(--acc2)}
 <h1>CNC pendant pro UGS / GRBL – kompletní návod</h1>
 <p class="sub">Ruční ovladač k frézce Lunyee 3018 Pro Ultra: 21 tlačítek, enkodér, 19 LED, USB klávesnice (RP2040). Výroba DPS frézováním, panel z hliníku pálený laserem, krabička 3D tisk.<br>Stav balíku: 19. 10. 2026 (kontrola DPS proti KiCadu)</p>
 
+<figure><img src="00_obrazky/fotky/foto_hotovy_pendant_sviti.jpg" alt="Hotový pendant"><figcaption>Hotový pendant v provozu</figcaption></figure>
 <div class="grid">
-<figure><img src="00_obrazky/sestava_iso.png" alt="Sestava"><figcaption>Sestava (model krabičky)</figcaption></figure>
+<figure><img src="00_obrazky/fotky/foto_hotovy_pendant_panel.jpg" alt="Panel"><figcaption>Panel – hliník, černý lak, popisy laserem</figcaption></figure>
 <figure><img src="04_panel_cela/2_laser_paleni/G-kody_bez_LightBurnu/pendant_panel_laser.png" alt="Panel" style="background:#fff"><figcaption>Popisy čela (pálí se laserem)</figcaption></figure>
 </div>
 
@@ -71,7 +72,7 @@ a{color:var(--acc2)}
 <h2 id="mapa">1. Co je v balíku</h2>
 <table>
 <tr><th>Složka</th><th>Obsah</th></tr>
-<tr><td class="f">00_obrazky</td><td>Náhledy sestavy a desek (měď, rozmístění) vykreslené z aktuálních souborů KiCad.</td></tr>
+<tr><td class="f">00_obrazky</td><td>Fotky hotového kusu (<span class="f">fotky/</span>), náhledy sestavy a desek (měď, rozmístění) vykreslené z aktuálních souborů KiCad.</td></tr>
 <tr><td class="f">01_DPS_KiCad</td><td>Projekty KiCad 10 všech tří desek (schéma, DPS, vlastní knihovny <span class="f">pendant.pretty</span>, interaktivní BOM desky B).</td></tr>
 <tr><td class="f">02_DPS_frezovani</td><td>G-kódy z FlatCAMu pro desky A, B, C seřazené podle postupu (A1…A6, B1…B4, C1…C3), gerbery, projekty FlatCAM, výškové mapy z Candle, starší verze.</td></tr>
 <tr><td class="f">03_pripravek_MDF</td><td>Výkres přípravku (DXF), G-kódy na jeho výrobu (Fusion) a program na vrtání rohových děr desky A.</td></tr>
@@ -229,6 +230,10 @@ a{color:var(--acc2)}
 <li>Před spojením desek změř multimetrem zkraty 3V3–GND a spojitost signálů na lištách.</li>
 </ol>
 <div class="grid">
+<figure><img src="00_obrazky/fotky/foto_deska_A_horni_s_deskou_C.jpg" alt=""><figcaption>Osazená deska A shora s deskou C (LED)</figcaption></figure>
+<figure><img src="00_obrazky/fotky/foto_deska_A_spodni.jpg" alt=""><figcaption>Deska A zespodu – 74HC595, diody, lišta J2; drátek = oprava průchodu</figcaption></figure>
+</div>
+<div class="grid">
 <figure><img src="00_obrazky/DPS_A_rozmisteni.png" alt=""><figcaption>Deska A – rozmístění (modře součástky na spodní straně)</figcaption></figure>
 <figure><img src="00_obrazky/DPS_B_rozmisteni.png" alt=""><figcaption>Deska B – rozmístění</figcaption></figure>
 <figure><img src="00_obrazky/DPS_C_rozmisteni.png" alt=""><figcaption>Deska C – rozmístění</figcaption></figure>
@@ -375,7 +380,9 @@ a{color:var(--acc2)}
 <li><b>Sloupky 3,5 mm</b> na desku A, na ně <b>panel</b>, shora 4× šroub <b>M3×10 ISO 7380</b> přes panel, sloupek a desku A do šestihranu.</li>
 <li><b>Knoflík</b> nasaď na osu enkodéru (1 mm nad panel, aby šel zmáčknout). USB-C je přístupné výřezem v levé stěně.</li>
 </ol>
+<figure><img src="00_obrazky/fotky/foto_deska_B_v_krabicce.jpg" alt=""><figcaption>Deska B v krabičce: Pico, enkodér, dutinkové lišty J101/J103, šestihranné sloupky</figcaption></figure>
 <div class="grid">
+<figure><img src="00_obrazky/fotky/foto_hotovy_pendant_sikmo.jpg" alt=""><figcaption>Hotový pendant</figcaption></figure>
 <figure><img src="00_obrazky/sestava_rez.png" alt=""><figcaption>Řez sestavou</figcaption></figure>
 <figure><img src="00_obrazky/sestava_rozlozena.png" alt=""><figcaption>Rozložená sestava</figcaption></figure>
 </div>
@@ -398,6 +405,6 @@ a{color:var(--acc2)}
 </table>
 
 <h3>Licence</h3><p>Hardware, mechanika a dokumentace: <b>CC BY-SA 4.0</b> (soubor <span class="f">LICENSE</span>). Firmware: <b>MIT</b> (<span class="f">06_firmware_Arduino/LICENSE</span>). Můžeš to volně používat, upravovat i sdílet – jen uveď autora a úpravy hardwaru/dokumentace sdílej pod stejnou licencí.</p>
-<div class="box ok"><b>Ověřený stav:</b> deska A – testy všech 21 tlačítek a 19 LED prošly; zkratky UGS jsou zapsané v PC; pálení čela je odzkoušené. <b>Neověřeno na hardwaru:</b> firmware v11 (prošel simulací), tištěné sloupky a knoflík.</div>
+<div class="box ok"><b>Ověřený stav:</b> pendant je postavený a funguje (viz fotky) – všech 21 tlačítek a 19 LED; zkratky UGS jsou zapsané v PC; pálení čela je odzkoušené. <b>Neověřeno na hardwaru:</b> firmware v11 (prošel simulací). Krabička, šestihranné sloupky a knoflík jsou vytištěné a sedí.</div>
 
 </main></body></html>

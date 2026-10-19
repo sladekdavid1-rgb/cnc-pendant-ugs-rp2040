@@ -10,7 +10,11 @@ no changes to GRBL.
 Everything is designed to be made at home on a 3018-class machine: PCB isolation milling, an MDF registration jig,
 an aluminium front panel engraved with a diode laser, and a 3D-printed enclosure.
 
-![Assembly](00_obrazky/sestava_iso.png)
+![Finished pendant](00_obrazky/fotky/foto_hotovy_pendant_sviti.jpg)
+
+| ![](00_obrazky/fotky/foto_hotovy_pendant_panel.jpg) | ![](00_obrazky/fotky/foto_deska_A_horni_s_deskou_C.jpg) | ![](00_obrazky/fotky/foto_deska_B_v_krabicce.jpg) |
+|---|---|---|
+| Laser-engraved aluminium panel | Board A (buttons) with LED board C | Board B (RP2040 + encoder) in the printed case |
 
 ## Features
 
@@ -59,7 +63,7 @@ All boards were cross-checked against the KiCad files (schematic ↔ PCB, Gerber
 
 | Folder | Contents |
 |---|---|
-| `00_obrazky` | renders, PCB copper and placement images (generated from the KiCad files) |
+| `00_obrazky` | photos of the finished build (`fotky/`), renders, PCB copper and placement images (generated from the KiCad files) |
 | `01_DPS_KiCad` | KiCad 10 projects of boards A, B, C (+ custom footprints, iBOM) |
 | `02_DPS_frezovani` | FlatCAM G-code in machining order (A1–A6, B1–B4, C1–C3), Gerbers, FlatCAM projects, Candle height maps |
 | `03_pripravek_MDF` | MDF registration jig (DXF + Fusion G-code), 4 × Ø2.5 mm pins on 88 × 58 mm |
@@ -99,9 +103,9 @@ Other senders: anything that lets you bind keyboard shortcuts can use the pendan
 
 ## Status
 
-- Board A with all 21 buttons and 19 LEDs tested on hardware; UGS keymap tested; laser panel tested.
+- The pendant is built and working (see photos): all 21 buttons and 19 LEDs tested, UGS keymap tested, laser-engraved panel done.
 - Firmware **v11** passed host simulation but is **not yet tested on hardware** – v10 is the fallback.
-- 3D-printed standoffs and knob not yet test-printed.
+- Case, hex standoffs and knob are printed and fitted (see photos).
 
 Issues, photos of your builds and improvements are welcome.
 
