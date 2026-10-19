@@ -259,6 +259,7 @@ a{color:var(--acc2)}
 </table>
 <h3>LED a odpory</h3>
 <p>Každá skupina LED má <b>jeden společný odpor</b> na desce C (proto svítí v řadě vždy jedna). Proud ≈ (3,3 V − Vf) / (R + ~30 Ω výstup 595). S 820 Ω je to ~1,3 mA (kontrolka), s 330 Ω ~3 mA, s 80 Ω ~10–12 mA u červené/žluté LED – to je hodně jasné, ale bezpečné. Tabulka: <span class="f">08_soupiska_BOM/pendant_LED_odpory.xlsx</span>.</p>
+<div class="box"><b>Hodnoty odporů R301–R304 ber jako výchozí.</b> Jas závisí na konkrétních LED (barva, typ, účinnost) a na tom, jak jasný panel chceš. Odpory je proto potřeba odladit individuálně: vyzkoušej jeden kus, podle potřeby změň hodnotu a ideálně sjednoť jas mezi skupinami. Doladit jde i softwarově jasem <code>LED_BRIGHT</code> ve firmwaru, ten ale mění všechny skupiny stejně.</div>
 
 <!-- ============================================================ -->
 <h2 id="firmware">6. Firmware a testy</h2>

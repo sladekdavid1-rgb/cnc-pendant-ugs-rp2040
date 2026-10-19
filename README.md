@@ -38,6 +38,8 @@ an aluminium front panel engraved with a diode laser, and a 3D-printed enclosure
 | **B – bottom** | single-sided | Laskakit Ultimate Pi Pico (RP2040), EC11E encoder, column pull-ups/filters |
 | **C – LED** | single-sided, no jumpers | 19× LED 0603, 4 group resistors |
 
+> **Note:** the LED group resistors R301–R304 (330 Ω / 820 Ω) are only a starting point. Tune them individually for the LEDs you use and the brightness you prefer (`LED_BRIGHT` in the firmware dims all groups equally).
+
 Panel 95 × 65 mm, M3 mounting holes on an 88 × 58 mm grid. Full BOM: [`08_soupiska_BOM/BOM_CNC_pendant.csv`](08_soupiska_BOM/BOM_CNC_pendant.csv).
 
 ### RP2040 pin map

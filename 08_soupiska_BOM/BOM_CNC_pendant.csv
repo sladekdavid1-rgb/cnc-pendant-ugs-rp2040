@@ -18,8 +18,8 @@ B spodní;1;Kondenzátor;10u;0805;C104;
 B spodní;1;Dutinková lišta;1×6;2,54 mm;J101;← A (J1)
 B spodní;1;Dutinková lišta;1×10;2,54 mm;J103;← A (J2)
 C LED;19;LED;0603 (barva dle výběru);0603;LED1–LED19;osy 3, krok XY 6, krok Z 4, rychlost 6
-C LED;1;Rezistor;330 Ω;0603;R301;skupina OSA
-C LED;3;Rezistor;820 Ω;0603;R302–R304;skupiny XY, Z, rychlost (viz pendant_LED_odpory.xlsx)
+C LED;1;Rezistor;330 Ω;0603;R301;"skupina OSA; výchozí hodnota – odladit podle použitých LED a požadovaného jasu"
+C LED;3;Rezistor;820 Ω;0603;R302–R304;"skupiny XY, Z, rychlost (viz pendant_LED_odpory.xlsx); výchozí hodnota – odladit podle použitých LED a požadovaného jasu"
 C LED;1;Lišta;1×12 bez pinů 2 a 6;2,54 mm;J301;← A (J3)
 C LED;1;Lišta;1×10;2,54 mm;J302;← A (J4)
 Mechanika;1;Krabička;3D tisk;CNCpendant.step;;
