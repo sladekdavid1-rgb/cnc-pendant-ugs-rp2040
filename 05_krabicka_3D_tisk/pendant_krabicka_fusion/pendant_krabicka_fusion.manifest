@@ -1,0 +1,10 @@
+{
+	"autodeskProduct": "Fusion",
+	"type": "script",
+	"author": "",
+	"description": {
+		"": "CNC pendant - krabicka a cela sestava (panel, DPS A/B/C, Pico, EC11, sloupky, sroubky)"
+	},
+	"supportedOS": "windows|mac",
+	"editEnabled": true
+}

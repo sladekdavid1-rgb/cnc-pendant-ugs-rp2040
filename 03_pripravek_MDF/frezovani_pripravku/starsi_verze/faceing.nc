@@ -1,0 +1,59 @@
+(faceing)
+(T13 D=40 CR=0 - ZMIN=0 - face mill)
+G90 G94
+G17
+G21
+(-Attention- Property Safe Retracts is set to Clearance Height.)
+(Ensure the clearance height will clear the part and or fixtures.)
+(Raise the Z-axis to a safe height before starting the program.)
+(When using Fusion for Personal Use, the feedrate of rapid)
+(moves is reduced to match the feedrate of cutting moves,)
+(which can increase machining time. Unrestricted rapid moves)
+(are available with a Fusion Subscription.)
+
+(Face1)
+T13
+S12000 M3
+G17 G90 G94
+G54
+G0 X176 Y6.368
+Z15.2
+G1 Z5.2 F500
+Z4 F333.3
+G18 G3 X172 Z0 I-4 K0 F500
+G1 X170.01
+X-20.01
+G3 X-24.01 Z4 I0 K4
+G1 Z5.2
+X176 Y32.456
+Z4 F333.3
+G3 X172 Z0 I-4 K0 F500
+G1 X170.01
+X-20.01
+G3 X-24.01 Z4 I0 K4
+G1 Z5.2
+X176 Y58.544
+Z4 F333.3
+G3 X172 Z0 I-4 K0 F500
+G1 X170.01
+X-20.01
+G3 X-24.01 Z4 I0 K4
+G1 Z5.2
+X176 Y84.632
+Z4 F333.3
+G3 X172 Z0 I-4 K0 F500
+G1 X170.01
+X-20.01
+G3 X-24.01 Z4 I0 K4
+G1 Z5.2
+X176 Y110.72
+Z4 F333.3
+G3 X172 Z0 I-4 K0 F500
+G1 X170.01
+X-20.01
+G3 X-24.01 Z4 I0 K4
+G1 Z15.2
+G17
+
+M5
+M30

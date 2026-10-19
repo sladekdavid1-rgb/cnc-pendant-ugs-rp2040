@@ -1,0 +1,12 @@
+# KiCad
+*-backups/
+.history/
+*.kicad_prl
+fp-info-cache
+*.lck
+# OS / editory
+Thumbs.db
+.DS_Store
+.vscode/
+# LightBurn zálohy
+*_backup.lbrn2

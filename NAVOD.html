@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CNC pendant – kompletní návod</title>
+<style>
+:root{--ink:#1d1f23;--mut:#5b616b;--line:#d9dce1;--acc:#b4531a;--acc2:#1f5f8b;--bg:#fbfaf8;--card:#fff;--warn:#fff4e5;--warnb:#e7a54a;--ok:#eef6ee;--okb:#6aa36f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15.5px/1.6 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+main{max-width:980px;margin:0 auto;padding:28px 22px 80px}
+h1{font-size:30px;margin:0 0 4px;letter-spacing:-.3px}
+h2{font-size:22px;margin:46px 0 10px;padding-top:14px;border-top:3px solid var(--ink)}
+h3{font-size:17.5px;margin:26px 0 6px;color:var(--acc2)}
+h4{font-size:15.5px;margin:18px 0 4px}
+p{margin:8px 0}
+.sub{color:var(--mut);margin:0 0 18px}
+code,.f{font-family:Consolas,"Cascadia Mono",Menlo,monospace;font-size:13.2px;background:#eef0f3;border-radius:4px;padding:1px 5px;word-break:break-word}
+.f{background:#f3ece6;color:#6b2e09}
+table{border-collapse:collapse;width:100%;margin:10px 0 14px;font-size:14px;background:var(--card)}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:#f0f1f3;font-weight:600}
+ol,ul{padding-left:24px;margin:6px 0}
+li{margin:3px 0}
+.box{border-left:5px solid var(--warnb);background:var(--warn);padding:10px 14px;margin:12px 0;border-radius:0 6px 6px 0}
+.ok{border-left-color:var(--okb);background:var(--ok)}
+.info{border-left-color:var(--acc2);background:#eaf2f8}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:12px 0}
+figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:8px}
+figure img{width:100%;height:auto;display:block}
+figcaption{font-size:13px;color:var(--mut);margin-top:4px}
+.toc{columns:2;column-gap:30px;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px 18px 12px 34px}
+.toc li{break-inside:avoid}
+.step{counter-reset:s}
+.tag{display:inline-block;font-size:12px;padding:0 6px;border-radius:10px;background:#e7e9ee;color:#333;margin-left:4px}
+.tag.red{background:#fde2dc;color:#8a2a12}
+.tag.grn{background:#dff0df;color:#245c27}
+a{color:var(--acc2)}
+@media (max-width:640px){.toc{columns:1}main{padding:18px 14px 60px}h1{font-size:24px}}
+@media print{body{background:#fff;font-size:11pt}main{max-width:none;padding:0}h2{break-before:page}table,figure,.box{break-inside:avoid}a{color:inherit;text-decoration:none}}
+</style>
+</head>
+<body><main>
+
+<h1>CNC pendant pro UGS / GRBL – kompletní návod</h1>
+<p class="sub">Ruční ovladač k frézce Lunyee 3018 Pro Ultra: 21 tlačítek, enkodér, 19 LED, USB klávesnice (RP2040). Výroba DPS frézováním, panel z hliníku pálený laserem, krabička 3D tisk.<br>Stav balíku: 19. 10. 2026</p>
+
+<div class="grid">
+<figure><img src="00_obrazky/sestava_iso.png" alt="Sestava"><figcaption>Sestava (model krabičky)</figcaption></figure>
+<figure><img src="04_panel_cela/2_laser_paleni/G-kody_bez_LightBurnu/pendant_panel_laser.png" alt="Panel" style="background:#fff"><figcaption>Popisy čela (pálí se laserem)</figcaption></figure>
+</div>
+
+<ol class="toc">
+<li><a href="#mapa">Co je v balíku</a></li>
+<li><a href="#potreby">Software, nástroje, materiál</a></li>
+<li><a href="#pripravek">Přípravek z MDF</a></li>
+<li><a href="#dps">Frézování DPS (A, B, C)</a></li>
+<li><a href="#osazeni">Osazení a pájení</a></li>
+<li><a href="#firmware">Firmware a testy</a></li>
+<li><a href="#ugs">Nastavení UGS</a></li>
+<li><a href="#ovladani">Ovládání pendantu</a></li>
+<li><a href="#panel">Panel – frézování a laser</a></li>
+<li><a href="#krabicka">Krabička, sloupky, knoflík</a></li>
+<li><a href="#kompletace">Kompletace</a></li>
+<li><a href="#problemy">Řešení problémů</a></li>
+</ol>
+
+<div class="box info"><b>Pořadí práce v kostce:</b> přípravek z MDF → DPS A, B, C (frézování, vrtání, ořez) → osazení → test LED a tlačítek → firmware v11 → zkratky v UGS → panel (frézování, lak, laser) → 3D tisk → kompletace.</div>
+
+<!-- ============================================================ -->
+<h2 id="mapa">1. Co je v balíku</h2>
+<table>
+<tr><th>Složka</th><th>Obsah</th></tr>
+<tr><td class="f">00_obrazky</td><td>Náhledy sestavy, rozmístění a routování desek.</td></tr>
+<tr><td class="f">01_DPS_KiCad</td><td>Projekty KiCad 10 všech tří desek (schéma, DPS, vlastní knihovny <span class="f">pendant.pretty</span>, interaktivní BOM desky B).</td></tr>
+<tr><td class="f">02_DPS_frezovani</td><td>G-kódy z FlatCAMu pro desky A, B, C seřazené podle postupu (A1…A6, B1…B4, C1…C3), gerbery, projekty FlatCAM, výškové mapy z Candle, starší verze.</td></tr>
+<tr><td class="f">03_pripravek_MDF</td><td>Výkres přípravku (DXF), G-kódy na jeho výrobu (Fusion) a program na vrtání rohových děr desky A.</td></tr>
+<tr><td class="f">04_panel_cela</td><td>1 – frézování hliníkového panelu (Fusion), 2 – laser (SVG vše v jednom, projekt LightBurn, test výkonu, G-kódy), 3 – alternativa s kapsou v MDF, DXF výkresy panelu.</td></tr>
+<tr><td class="f">05_krabicka_3D_tisk</td><td>Krabička (STEP k tisku, OpenSCAD, skript pro Fusion), projekt tisku knoflíku (3MF), distanční sloupky, knoflík ve výškách 9–14 mm.</td></tr>
+<tr><td class="f">06_firmware_Arduino</td><td><b>cnc_pendant_v11</b> (doporučený), cnc_pendant (v10, záloha), testovací programy.</td></tr>
+<tr><td class="f">07_UGS_zkratky</td><td>34 souborů klávesových zkratek pro UGS (kopírují se do konfigurace UGS).</td></tr>
+<tr><td class="f">08_soupiska_BOM</td><td>Soupiska součástek a mechaniky (CSV pro Excel), výpočet odporů LED.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="potreby">2. Software, nástroje, materiál</h2>
+<h3>Software</h3>
+<table>
+<tr><th>Program</th><th>K čemu</th></tr>
+<tr><td>KiCad 10</td><td>úpravy schémat a desek, export gerberů</td></tr>
+<tr><td>FlatCAM 8.992</td><td>gerbery → G-kód (projekty <span class="f">.FlatPrj</span> jsou přiložené)</td></tr>
+<tr><td>Candle (GRBL Control)</td><td>frézování DPS s výškovou mapou (<span class="f">.map</span>)</td></tr>
+<tr><td>Autodesk Fusion</td><td>programy přípravku a panelu, skript krabičky</td></tr>
+<tr><td>LightBurn</td><td>pálení podkladu a čela laserem</td></tr>
+<tr><td>Arduino IDE 2 + jádro <b>arduino-pico</b> (Earle Philhower)</td><td>firmware do RP2040</td></tr>
+<tr><td>UGS Platform (Universal Gcode Sender)</td><td>ovládání frézky – pendant v něm mačká klávesové zkratky</td></tr>
+<tr><td>Slicer (Bambu Studio / PrusaSlicer / Orca)</td><td>tisk krabičky, sloupků, knoflíku</td></tr>
+</table>
+
+<h3>Nástroje do frézky</h3>
+<table>
+<tr><th>Nástroj</th><th>Použití</th></tr>
+<tr><td>rytecká V-fréza (šířka řezu 0,16–0,18 mm v hloubce 0,1 mm)</td><td>izolace mědi A, B, C</td></tr>
+<tr><td>vrták 0,4 mm</td><td>průchody (via) na desce A</td></tr>
+<tr><td>vrták 1,0 mm</td><td>vývody součástek (A, B, C)</td></tr>
+<tr><td>vrták 2,5 mm</td><td>rohové díry DPS + díry pro kolíčky v přípravku</td></tr>
+<tr><td>stopková fréza 1,8 mm</td><td>ořez desek, kapsa Ø10 pro enkodér</td></tr>
+<tr><td>vrták 2 a 3 mm, stopková fréza 3 mm</td><td>hliníkový panel</td></tr>
+<tr><td>stopková fréza 4 mm (nebo 3,175), frézovací hlava 40 mm</td><td>přípravek z MDF</td></tr>
+<tr><td>sonda / krokosvorky pro Z (probe)</td><td>nula Z a výšková mapa</td></tr>
+</table>
+
+<h3>Materiál</h3>
+<ul>
+<li>Cuprextit 100 × 70 mm: <b>oboustranný</b> pro desku A, jednostranný pro B a C (C stačí ~35 × 37 mm).</li>
+<li>MDF 12 mm, 150 × 130 mm (přípravek), 4 ocelové kolíčky Ø2,5 mm.</li>
+<li>Hliník 1 mm na panel (polotovar větší než 95 × 65), černý lak.</li>
+<li>Součástky – viz <span class="f">08_soupiska_BOM/BOM_CNC_pendant.csv</span>.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="pripravek">3. Přípravek z MDF</h2>
+<p>Přípravek drží polotovar DPS na 4 kolíčcích Ø2,5 mm v rozteči <b>88 × 58 mm</b> (stejná rozteč jako montážní díry desek). Díky kolíčkům jde oboustranná deska A otočit a druhá strana přesně navazuje. Přišroubuje se do závitových děr M6 stolu (rastr 54 × 50 mm).</p>
+<figure style="max-width:620px"><img src="03_pripravek_MDF/pripravek_DPS_3018.png" alt="Přípravek"><figcaption>Přípravek 150 × 130 mm: kolíčky Ø2,5 (±44/±29 od středu), upínací díry Ø7 se zahloubením Ø11 × 6,5 (±54, 0), díry pro svorky Ø7 (−54/0/+54, ±50), vyznačený polotovar 100 × 70 a deska 95 × 65.</figcaption></figure>
+
+<h3>Výroba přípravku</h3>
+<p>Programy jsou z Fusionu, <b>nula X0 Y0 = levý dolní roh MDF</b>, Z0 = horní plocha MDF. Střed přípravku (75, 65) je zároveň střed jedné díry M6 ve stole.</p>
+<table>
+<tr><th>Soubor <span class="f">03_pripravek_MDF/frezovani_pripravku/</span></th><th>Nástroj</th><th>Co dělá</th></tr>
+<tr><td class="f">P1_zarovnani_plochy_FACEv03_frezahlava40.nc</td><td>hlava Ø40</td><td>srovná horní plochu (Z0 až 0)</td></tr>
+<tr><td class="f">P2_diry_pro_kolicky_vrtak2.5.nc</td><td>vrták 2,5</td><td>4 díry pro kolíčky, hloubka 4 mm, body (31,36) (119,36) (31,94) (119,94)</td></tr>
+<tr><td class="f">P3_upinaci_diry_zahloubeni_a_obrys_freza4.nc</td><td>fréza 4</td><td>upínací díry Ø7 + zahloubení, díry pro svorky a ořez obrysu do hloubky 12 mm (obsahuje M0 – výměna nástroje)</td></tr>
+<tr><td class="f">alternativy_jen_diry/</td><td>fréza 4 / 3,175</td><td>jen díry bez obrysu (když je MDF už nařezaný)</td></tr>
+</table>
+<ol>
+<li>Přišroubuj přípravek šrouby M6 do stolu, kolíčky zatím nevkládej.</li>
+<li>Najeď přesně nad <b>levou dolní díru pro kolíček</b> a zapiš si strojní souřadnice (MPos). Tenhle bod je nula pro desku A i pro rohové díry všech desek; deska B a C mají nulu jinde (viz dále).</li>
+</ol>
+
+<!-- ============================================================ -->
+<h2 id="dps">4. Frézování DPS</h2>
+
+<div class="box"><b>Platí pro všechny programy z FlatCAMu:</b>
+<ul>
+<li>Většina z nich spouští vřeteno příkazem <code>M03</code> <b>bez otáček S</b> (S12000 mají jen A2 a A5). GRBL pak použije poslední nastavené otáčky – před spuštěním pošli v konzoli <code>M3 S12000</code> a zase <code>M5</code>, nebo nastav otáčky v Candle.</li>
+<li>Nula Z = povrch mědi, vždy sondou. Před izolací (A1, A2, B2, C1) <b>změř novou výškovou mapu</b> v Candle (mřížka 7 × 5, jako v přiložených <span class="f">.map</span>). Přiložené mapy platí jen pro tehdejší polotovar – jsou tu pro informaci o nastavení.</li>
+<li>Ořezy (A6, B4, C3) jdou na celou hloubku 1,8 mm ve 3 krocích a <b>nemají můstky</b>. Desku drží kolíčky a oboustranná páska – pásku dej i pod oblast, která se odřízne.</li>
+<li>Rychlosti jsou v hlavičce každého souboru (např. izolace F400–500, vrtání po krocích 0,5 mm s F300, ořez F120).</li>
+</ul></div>
+
+<h3>Deska A – horní (oboustranná) <span class="tag">tlačítka, 74HC595</span></h3>
+<p><b>Nula X0 Y0 = střed levé dolní díry kolíčku přípravku</b> (= střed levé dolní montážní díry desky). Všechny programy desky A mají tuto nulu.</p>
+<table>
+<tr><th>#</th><th>Soubor</th><th>Nástroj</th><th>Strana nahoře</th></tr>
+<tr><td>A0</td><td class="f">03_pripravek_MDF/vrtani_DPS/A0_vrtani_rohovych_der_2.5mm_do_pripravku.nc</td><td>vrták 2,5, hl. 6 mm</td><td>libovolná</td></tr>
+<tr><td>A1</td><td class="f">A1_spodni_med_ZRCADLENO_freza0.16.nc</td><td>V-fréza (0,16)</td><td><b>spodní</b> (zrcadleno)</td></tr>
+<tr><td>A2</td><td class="f">A2_horni_med_FCUV01_bez_der_freza0.18.nc</td><td>V-fréza (0,18)</td><td><b>horní</b></td></tr>
+<tr><td>A3</td><td class="f">A3_vrtani_0.4mm_prokovy.nc</td><td>vrták 0,4</td><td>horní</td></tr>
+<tr><td>A4</td><td class="f">A4_vrtani_1.0mm_soucastky.nc</td><td>vrták 1,0 (díry 1,0 i 1,1)</td><td>horní</td></tr>
+<tr><td>A5</td><td class="f">A5_kruh_D10_enkoder_freza1.8.nc</td><td>fréza 1,8</td><td>horní</td></tr>
+<tr><td>A6</td><td class="f">A6_vyriznuti_obrysu_freza1.8.nc</td><td>fréza 1,8</td><td>horní</td></tr>
+</table>
+<ol>
+<li>Přilep polotovar 100 × 70 oboustrannou páskou do vyznačeného obdélníku na přípravku (kolíčky vyndané). Nula XY na díru kolíčku, Z sondou na měď.</li>
+<li><b>A0</b> – vyvrtá 4 rohové díry Ø2,5 skrz desku do přípravku. Vlož kolíčky – od teď deska sedí na kolíčcích.</li>
+<li><b>A1 – spodní měď.</b> Výšková mapa, frézování. Program je zrcadlený přes vodorovnou osu, takže nahoře je strana, která bude <b>spodní</b>.</li>
+<li><b>Otoč desku přes vodorovnou osu</b> (horní hrana dolů, jako když otáčíš list v bloku nahoru) a nasaď ji zpět na kolíčky. Rozteč děr je souměrná, takže sedí. Znovu nula Z a nová výšková mapa.</li>
+<li><b>A2 – horní měď.</b> Verze „bez děr“ nefrézuje kolem rohových děr, kde jsou kolíčky (verze s dírami je ve <span class="f">starsi_programy</span>).</li>
+<li><b>A3</b> průchody 0,4 mm, <b>A4</b> díry 1,0 mm (program vrtá všechny 1,0 i 1,1 jedním vrtákem, postupně po 0,5 mm do −1,7).</li>
+<li><b>A5</b> – kapsa Ø10 skrz desku pro průchod enkodéru (střed X72 Y12).</li>
+<li><b>A6</b> – ořez obrysu 95 × 65.</li>
+<li>Rohové díry Ø2,5 převrtej ručně na <b>Ø3,2</b> (šrouby M3).</li>
+</ol>
+<div class="box"><b>Pozor – deska nemá prokovené díry.</b> Každý průchod (via) protáhni drátkem a zapájej z obou stran. Každý vývod součástky, ke kterému vede cesta i na horní straně, pájej <b>z obou stran</b>. (Přesně tohle byla příčina nefunkčního SW01 a nesvítících řad LED – viz <a href="#problemy">Řešení problémů</a>.)</div>
+<p>Starší verze programů (první pokusy horní mědi, pilotní díry, stará mapa) jsou v <span class="f">02_DPS_frezovani/A_horni/starsi_programy</span>, jen pro archiv.</p>
+
+<h3>Deska B – spodní (jednostranná, měď dole) <span class="tag">Pico, enkodér</span></h3>
+<p><b>Nula X0 Y0 = levý dolní ROH desky B</b>, tj. bod <b>3,5 mm vlevo a 3,5 mm pod</b> středem díry kolíčku. Najeď na díru kolíčku, posuň o X−3,5 Y−3,5 a tam vynuluj.</p>
+<table>
+<tr><th>#</th><th>Soubor <span class="f">02_DPS_frezovani/B_spodni/</span></th><th>Nástroj</th></tr>
+<tr><td>B1</td><td class="f">B1_vrtani_rohovych_der_2.5mm_do_pripravku.nc</td><td>vrták 2,5, hloubka 6 mm (skrz do přípravku)</td></tr>
+<tr><td>B2</td><td class="f">B2_med_ZRCADLENO_bez_rohovych_der_freza0.18.nc</td><td>V-fréza (0,18), F500</td></tr>
+<tr><td>B3</td><td class="f">B3_vrtani_1.0mm.nc</td><td>vrták 1,0</td></tr>
+<tr><td>B4</td><td class="f">B4_vyriznuti_obrysu_freza1.8.nc</td><td>fréza 1,8</td></tr>
+</table>
+<ol>
+<li>Polotovar <b>mědí nahoru</b> na přípravek, nula XY (viz výše), Z na měď.</li>
+<li>B1 → vlož kolíčky → výšková mapa → B2 → B3 → B4.</li>
+<li>Měď je zrcadlená přes vodorovnou osu (frézuje se ze strany mědi). Hotová deska: Pico, enkodér a lišty se vkládají z <b>holé</b> strany a pájí na mědi; SMD odpory a kondenzátory jsou na straně mědi.</li>
+<li>Rohové díry převrtej na Ø3,2.</li>
+</ol>
+
+<h3>Deska C – LED (jednostranná, měď nahoře)</h3>
+<p>Malá deska ~31 × 33 mm. <b>Nula X0 Y0 = levý dolní roh obrysu desky C</b> na polotovaru, Z na měď. Nepotřebuje kolíčky – stačí oboustranná páska na kousku cuprextitu.</p>
+<table>
+<tr><th>#</th><th>Soubor <span class="f">02_DPS_frezovani/C_led/</span></th><th>Nástroj</th></tr>
+<tr><td>C1</td><td class="f">C1_med_freza0.18.nc</td><td>V-fréza (0,18), F500</td></tr>
+<tr><td>C2</td><td class="f">C2_vrtani_1.0mm.nc</td><td>vrták 1,0 (20 děr pro lišty)</td></tr>
+<tr><td>C3</td><td class="f">C3_vyriznuti_obrysu_freza1.8.nc</td><td>fréza 1,8</td></tr>
+</table>
+<p>Deska C je jednovrstvá bez propojek. LED a odpory R301–R304 (0603) jsou na straně mědi, která míří k panelu.</p>
+
+<div class="grid">
+<figure><img src="00_obrazky/routovani_A.png" alt=""><figcaption>Deska A – routování</figcaption></figure>
+<figure><img src="00_obrazky/routovani_B.png" alt=""><figcaption>Deska B – routování</figcaption></figure>
+<figure><img src="00_obrazky/routovani_C_1vrstva.png" alt=""><figcaption>Deska C – jedna vrstva</figcaption></figure>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="osazeni">5. Osazení a pájení</h2>
+<h3>Postup</h3>
+<ol>
+<li><b>A:</b> nejdřív drátky do průchodů (obě strany), pak SMD – 3× 74HC595 (U4–U6), 21× dioda 1N4148W (orientace!), C40–C43, R50. Pak lišty J1–J4 a nakonec 21 tlačítek. Vývody s cestou nahoře pájej i shora.</li>
+<li><b>C:</b> 19 LED (pozor na polaritu), R301 = 330 Ω (osy), R302–R304 = 820 Ω, lišty J301 (1×12 s vytaženými piny 2 a 6) a J302 (1×10).</li>
+<li><b>B:</b> SMD (7× 10k R102–R108, 10n, 100n, 10u), dutinkové lišty J101 a J103, enkodér EC11, Pico (Laskakit Ultimate Pi Pico).</li>
+<li>Před spojením desek změř multimetrem zkraty 3V3–GND a spojitost signálů na lištách.</li>
+</ol>
+<h3>Propojení desek</h3>
+<table>
+<tr><th>A ↔ B</th><th>Piny</th></tr>
+<tr><td>J1 ↔ J101 (LED, 1×6)</td><td>1 OE · 2 RCLK · 3 SRCLK · 4 SER · 5 GND · 6 +3V3</td></tr>
+<tr><td>J2 ↔ J103 (tlačítka, 1×10)</td><td>1 ROW0 · 2 ROW1 · 3 ROW2 · 4 COL0 · 5 COL1 · 6 COL2 · 7 COL3 · 8 COL4 · 9 COL5 · 10 COL6</td></tr>
+<tr><th>A ↔ C</th><th>Osazené piny shora dolů</th></tr>
+<tr><td>J3 ↔ J301 (1×12 bez pinů 2 a 6)</td><td>LED1 · LED6 · LED5 · LED4 · LED11 · LED10 · GND · LED16 · LED15 · LED14</td></tr>
+<tr><td>J4 ↔ J302 (1×10)</td><td>LED3 · LED2 · LED7 · LED8 · LED9 · LED12 · LED13 · LED17 · LED18 · LED19</td></tr>
+</table>
+<p>Mezera mezi deskami B a A je 11 mm (výška sloupku). Propoj je dutinkovou lištou na B a kolíky z A, nebo krátkými drátky. Přesné zapojení je ve schématech v <span class="f">01_DPS_KiCad</span>.</p>
+
+<h3>Piny Pica (firmware)</h3>
+<table>
+<tr><th>Funkce</th><th>GPIO</th></tr>
+<tr><td>Řádky matice ROW0–ROW2</td><td>GP2, GP3, GP4</td></tr>
+<tr><td>Sloupce matice COL0–COL6</td><td>GP5 – GP11 (vnitřní pull-up + 10k na desce B)</td></tr>
+<tr><td>Enkodér SW / B (DT) / A (CLK)</td><td>GP13 / GP14 / GP15</td></tr>
+<tr><td>74HC595 SER / SRCLK / RCLK / OE</td><td>GP18 / GP19 / GP20 / GP21 (OE = PWM jas)</td></tr>
+</table>
+<h3>LED a odpory</h3>
+<p>Každá skupina LED má <b>jeden společný odpor</b> na desce C (proto svítí v řadě vždy jedna). Proud ≈ (3,3 V − Vf) / (R + ~30 Ω výstup 595). S 820 Ω je to ~1,3 mA (kontrolka), s 330 Ω ~3 mA, s 80 Ω ~10–12 mA u červené/žluté LED – to je hodně jasné, ale bezpečné. Tabulka: <span class="f">08_soupiska_BOM/pendant_LED_odpory.xlsx</span>.</p>
+
+<!-- ============================================================ -->
+<h2 id="firmware">6. Firmware a testy</h2>
+<h3>Arduino IDE – jednorázové nastavení</h3>
+<ol>
+<li>Soubor → Předvolby → <i>Další URL správce desek</i>:<br><code>https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json</code></li>
+<li>Správce desek → nainstaluj <b>Raspberry Pi Pico/RP2040</b> (Earle F. Philhower).</li>
+<li>Nástroje → Deska: <b>Raspberry Pi Pico</b>; Nástroje → USB Stack: <b>Pico SDK</b>.</li>
+<li>Každý program je ve vlastní složce (Arduino to vyžaduje) – otevři <span class="f">.ino</span> a nahraj.</li>
+<li>Když nahrání skončí hláškou <i>No drive to deploy</i>: odpoj USB, drž tlačítko <b>BOOTSEL</b> na Picu, připoj USB, pusť a nahraj znovu.</li>
+</ol>
+<h3>Testy (v tomto pořadí)</h3>
+<table>
+<tr><th>Program <span class="f">06_firmware_Arduino/testy/</span></th><th>Co ověří</th></tr>
+<tr><td class="f">pendant_led_test</td><td>Rozsvítí všech 19 LED (<code>VSE_NARAZ = true</code>), nebo animaci po řadách (<code>false</code>). Nepíše nic do PC.</td></tr>
+<tr><td class="f">pendant_test</td><td>Píše názvy tlačítek a enkodér do Poznámkového bloku (klikni do něj a zapni NumLock; je upravený pro českou klávesnici). Řádek „SW01 UNLOCK R0 C0“ = tlačítko, řádek, sloupec.</td></tr>
+<tr><td class="f">pendant_sim</td><td>Simulace nastavení jen na LED (krok XY/Z, rychlost, osa) – do PC nic neposílá.</td></tr>
+<tr><td class="f">pendant_ugs_mapovani</td><td>Každé tlačítko pošle jednu zkratku – jen pokud bys chtěl zkratky v UGS nastavovat ručně.</td></tr>
+</table>
+<div class="box">Testovací programy nikdy nespouštěj s otevřeným oknem chatu, prohlížeče nebo UGS v popředí – pendant „píše“ do aktivního okna.</div>
+<h3>Hlavní program</h3>
+<ul>
+<li><b>cnc_pendant_v11</b> – doporučený (pojistka podržením, diagonály, zrychlení enkodéru, stmívání, testovací režim). Kompilaci a logiku jsem ověřil v simulaci, na stroji ještě neodzkoušený.</li>
+<li><b>cnc_pendant</b> (v10) – předchozí ověřená verze, kdyby v11 dělal potíže.</li>
+<li>Nastavení (časy, jas, výchozí krok) je nahoře v sekci <i>Nastavení</i>: <code>CONFIRM_MS</code>, <code>ENC_FAST_COUNT</code>, <code>LED_BRIGHT</code>, <code>LED_DIM</code>, <code>XY_START</code>, <code>Z_START</code>, <code>FEED_START</code>.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="ugs">7. Nastavení UGS</h2>
+<ol>
+<li><b>Zavři UGS.</b></li>
+<li>Otevři složku <code>%APPDATA%\ugsplatform\config\Keymaps\NetBeans\</code> (zkopíruj do adresního řádku Průzkumníka). Pokud neexistuje, vytvoř ji. Starý obsah si zazálohuj.</li>
+<li>Zkopíruj do ní všech 34 souborů z <span class="f">07_UGS_zkratky/NetBeans</span>.</li>
+<li>Spusť UGS → Tools → Options → Keymap, do hledání napiš <code>F13</code> – musí se ukázat <i>Jog X+</i>.</li>
+<li>V panelu Jog zapni <b>samostatný krok pro Z</b> (<i>Use separate step size for Z</i>).</li>
+</ol>
+<div class="box"><b>Zkratky fungují jen když je okno UGS aktivní.</b> Po připojení pendantu (2,5 s) se do UGS pošle výchozí krok XY 10 mm, Z 1 mm a rychlost 1000 – UGS musí být v tu chvíli v popředí.</div>
+<table>
+<tr><th>Zkratka</th><th>Akce v UGS</th><th>Zkratka</th><th>Akce v UGS</th></tr>
+<tr><td>F13 / F14</td><td>Jog X+ / X−</td><td>Shift+F13/F14/F15</td><td>Nula X / Y / Z</td></tr>
+<tr><td>F15 / F16</td><td>Jog Y+ / Y−</td><td>Shift+F16</td><td>Probe Z</td></tr>
+<tr><td>F17 / F18</td><td>Jog Z+ / Z−</td><td>Shift+F17 / F18</td><td>Home / Return to zero</td></tr>
+<tr><td>F21</td><td>Pause / Resume</td><td>Shift+F19 / F20 / F21</td><td>Rychlost ×10 / ÷10 / +1000</td></tr>
+<tr><td>F22 / F23</td><td>Start / Stop</td><td>Ctrl+F13…F16</td><td>Krok XY 0,01 / 0,1 / 1 / 10</td></tr>
+<tr><td>F24</td><td>Unlock</td><td>Ctrl+F17 / F18</td><td>Krok XY ×10 / +</td></tr>
+<tr><td>Ctrl+Shift+F13…F16</td><td>Diagonály X+Y+ / X+Y− / X−Y+ / X−Y−</td><td>Ctrl+F19…F22, F23</td><td>Krok Z 0,01 / 0,1 / 1 / 10, Z +</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="ovladani">8. Ovládání pendantu (firmware v11)</h2>
+<table>
+<tr><th>Ovládací prvek</th><th>Funkce</th></tr>
+<tr><td>OSA X / Y / Z</td><td>Volba osy (svítí LED osy). Druhý stisk osu zruší = <b>zamčeno</b>. Bez zvolené osy nefungují šipky, NULA, HOME, RTZ, PROBE – LED os 3× bliknou.</td></tr>
+<tr><td>X± Y± Z±</td><td>Ťuknutí = jeden krok. Podržení = plynulý pojezd, dokud držíš. <b>X a Y zároveň = šikmo.</b></td></tr>
+<tr><td>Enkodér – otáčení</td><td>Se zvolenou osou: kroky v ose; rychlé točení dočasně zvětší krok o stupeň (XY max 10 mm, Z max 1 mm). Bez osy: mění rychlost.</td></tr>
+<tr><td>Enkodér – tlačítko</td><td>Krátce = větší krok, dlouze (&gt; 0,6 s) = menší. Při zvolené ose Z mění krok Z, jinak XY.</td></tr>
+<tr><td>F+ / F−</td><td>Rychlost: 10 / 100 / 1000 / 2000 / 3000 / MAX mm/min.</td></tr>
+<tr><td>START</td><td>Start programu – <b>podržet 0,5 s</b>.</td></tr>
+<tr><td>HOME, RTZ, PROBE, NULA X/Y/Z</td><td><b>Podržet 0,5 s</b> (během držení rychle blikají LED os, po provedení bliknou všechny LED). Vyžadují zvolenou osu.</td></tr>
+<tr><td>HOLD</td><td>Pauza / pokračování – okamžitě, předběhne frontu.</td></tr>
+<tr><td>STOP</td><td>Okamžitě, zahodí čekající kroky; všechny LED 5 s blikají.</td></tr>
+<tr><td>UNLOCK</td><td>Zrušení alarmu ($X) – okamžitě.</td></tr>
+</table>
+<p><b>LED:</b> řada osa (X Y Z), krok XY (0,05 · 0,1 · 1 · 10 · 50 · 100 mm), krok Z (0,05 · 0,1 · 1 · 10 mm), rychlost (10 · 100 · 1k · 2k · 3k · MAX). Bliká-li LED kroku/rychlosti, nevešlo se nastavení do fronty – nastav hodnotu znovu. Po 2 minutách bez dotyku se LED ztlumí.</p>
+<p><b>Testovací režim:</b> drž STOP a připoj USB. Do PC nejde nic, Serial Monitor (115200) vypisuje tlačítka a enkodér, držené tlačítko rozsvítí všechny LED. Konec = odpojit USB.</p>
+
+<!-- ============================================================ -->
+<h2 id="panel">9. Panel čela</h2>
+<h3>9.1 Frézování hliníku (Fusion)</h3>
+<p><b>Nula X0 Y0 = levý dolní roh panelu</b> (95 × 65), Z0 = povrch hliníku. Polotovar přichyť na obětní MDF (oboustranná páska + svorky mimo dráhu).</p>
+<table>
+<tr><th>Soubor <span class="f">04_panel_cela/1_frezovani_hlinik/</span></th><th>Nástroj</th><th>Co dělá</th></tr>
+<tr><td class="f">H1_vrtani_der_M3_vrtak3.nc</td><td>vrták 3</td><td>předvrtání všech děr (tlačítka, enkodér, 4× M3)</td></tr>
+<tr><td class="f">H2_vrtani_der_LED_vrtak2.nc</td><td>vrták 2</td><td>19 okének pro LED</td></tr>
+<tr><td class="f">H3_diry_tlacitek_a_enkoderu_freza3.nc</td><td>fréza 3</td><td>vyfrézování děr tlačítek a enkodéru</td></tr>
+<tr><td class="f">H4_obrys_panelu_freza3.nc</td><td>fréza 3</td><td>ořez obrysu (jako poslední)</td></tr>
+</table>
+<p>Pak odjehlit, odmastit a nastříkat černým lakem. Starší verze (včetně rytí <span class="f">engrave.nc</span>, které se v hliníku neosvědčilo) jsou v <span class="f">starsi_verze</span>.</p>
+
+<h3>9.2 Pálení popisů laserem (LightBurn)</h3>
+<ol>
+<li><b>Test výkonu</b> na odřezku: LightBurn → Laser Tools → <i>Material Test</i> (Fill, interval 0,1 mm, rychlost 800–3500, výkon 30–100 %), nebo soubor <span class="f">test_F_S_laser_hlinik.nc</span> přes tlačítko <i>Run GCode</i> v okně Laser. Vyber nejrychlejší políčko, kde je lak čistě pryč.</li>
+<li>Otevři <span class="f">LightBurn_projekt_paleni_cela_V01.lbrn2</span> (tvůj odladěný projekt) nebo importuj <span class="f">pendant_laser_vse_v_jednom.svg</span>. Barvy = vrstvy: <b>modrá</b> podklad (Line), <b>černá</b> čelo (Fill, interval 0,1 mm), <b>červená</b> tečka nuly.</li>
+<li>Na stůl připevni podklad (MDF, karton). Nastav nulu laseru na místo tečky. Nic v projektu neposouvej.</li>
+<li>Zapni jen modrou vrstvu (+ tečku) a vypal <b>podklad</b>: obrys panelu, rohové značky, křížky v dírách M3.</li>
+<li>Polož lakovaný panel do obrysu tak, aby křížky byly uprostřed děr M3, a přichyť ho.</li>
+<li>Vypni modrou, zapni černou a vypal <b>čelo</b>. Nulu mezi kroky neměň.</li>
+</ol>
+<div class="grid">
+<figure><img src="04_panel_cela/2_laser_paleni/podklad_nahled.png" alt=""><figcaption>Podklad: obrys, rohy, křížky v dírách</figcaption></figure>
+<figure><img src="04_panel_cela/2_laser_paleni/test_F_S_nahled.png" alt=""><figcaption>Test 5 rychlostí × 5 výkonů</figcaption></figure>
+</div>
+<p>Bez LightBurnu: <span class="f">2_laser_paleni/G-kody_bez_LightBurnu</span> obsahuje hotové G-kódy podkladu (i „nanečisto“ slabým paprskem) a čela s <b>nulou ve středu levé dolní díry M3</b>. GRBL musí mít <code>$32=1</code> (laserový režim).</p>
+
+<h3>9.3 Alternativa: kapsa v MDF frézkou</h3>
+<p><span class="f">3_alternativa_MDF_kapsa/kapsa_panel_MDF_D4.nc</span> vyfrézuje do MDF kapsu 95,2 × 65,2 × 2 mm (fréza Ø4, nula = střed levé dolní díry M3). Panel se vloží do kapsy a laser má stejnou nulu jako G-kódy bez LightBurnu.</p>
+
+<!-- ============================================================ -->
+<h2 id="krabicka">10. Krabička, sloupky, knoflík (3D tisk)</h2>
+<table>
+<tr><th>Soubor <span class="f">05_krabicka_3D_tisk/</span></th><th>Popis</th></tr>
+<tr><td class="f">CNCpendant.step</td><td><b>krabička</b> – tiskni přímo z tohoto souboru (Bambu Studio, Orca i PrusaSlicer umí STEP načíst), dnem dolů</td></tr>
+<tr><td class="f">CNCpendant.3mf</td><td>projekt pro Bambu Studio / Orca s nastaveným tiskem knoflíku (D osa, 13 mm)</td></tr>
+<tr><td class="f">pendant_krabicka.scad</td><td>OpenSCAD – <code>SHOW = 1</code> jen krabička, <code>0</code> celá sestava</td></tr>
+<tr><td class="f">pendant_krabicka_fusion/</td><td>skript pro Fusion (Utilities → Scripts and Add-Ins → + → složka → Run) – postaví celou sestavu po komponentách</td></tr>
+<tr><td class="f">distancni_sloupky/distance_sada_5+5ks.stl</td><td>5× šestihran 5,5 × 11 mm (B→A, otvor 2,6 – šroub se zařízne, drží se klíčem 5,5) + 5× Ø6 × 3,5 mm (A→panel). Tisk nastojato, 100 % výplň, ideálně PETG.</td></tr>
+<tr><td class="f">knoflik/</td><td>knoflík Ø25 s drážkami a důlkem na prst; vyber výšku podle toho, kolik osy čouhá nad panel (9–14 mm), pro D osu nebo vroubkovanou. Tisk spodkem dolů bez podpor.</td></tr>
+</table>
+<figure style="max-width:760px"><img src="05_krabicka_3D_tisk/knoflik/knoflik_nahled.png" alt=""><figcaption>Knoflík – horní hrana jen 1,5 mm nad koncem osy</figcaption></figure>
+
+<!-- ============================================================ -->
+<h2 id="kompletace">11. Kompletace</h2>
+<p>Skladba odspodu (podle modelu):</p>
+<ol>
+<li><b>Dno krabičky</b> se 4 sloupky (výška 7 mm, zespodu zahloubení pro hlavy šroubů).</li>
+<li><b>Deska B</b> na sloupcích krabičky. Zespodu 4× šroub <b>M3×10</b> přes dno a desku B do šestihranných sloupků 11 mm (sloupek přidrž klíčem 5,5).</li>
+<li><b>Deska A</b> na šestihranech, propojená s B lištami J1–J101 a J2–J103. Osa enkodéru prochází kapsou Ø10 v desce A.</li>
+<li><b>Deska C</b> visí na lištách J3/J4 desky A, LED míří nahoru do okének panelu.</li>
+<li><b>Sloupky 3,5 mm</b> na desku A, na ně <b>panel</b>, shora 4× šroub <b>M3×10 ISO 7380</b> přes panel, sloupek a desku A do šestihranu.</li>
+<li><b>Knoflík</b> nasaď na osu enkodéru (1 mm nad panel, aby šel zmáčknout). USB-C je přístupné výřezem v levé stěně.</li>
+</ol>
+<div class="grid">
+<figure><img src="00_obrazky/sestava_rez.png" alt=""><figcaption>Řez sestavou</figcaption></figure>
+<figure><img src="00_obrazky/sestava_rozlozena.png" alt=""><figcaption>Rozložená sestava</figcaption></figure>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="problemy">12. Řešení problémů</h2>
+<table>
+<tr><th>Příznak</th><th>Příčina / řešení</th></tr>
+<tr><td>Tlačítka se „mačkají“ sama hned po připojení</td><td>Plovoucí sloupce (chybí deska B s pull-upy). Firmware má vnitřní pull-up (<code>INPUT_PULLUP</code>) – používej aktuální verze.</td></tr>
+<tr><td>Nefunguje jedno tlačítko (nebo dvojice v řadě)</td><td>Nezapájený vývod na horní straně (neprokovené díry!). U SW01 to byla přesně tahle chyba.</td></tr>
+<tr><td>Celá řada LED nesvítí, data ale „procházejí“</td><td>RCLK (latch) nedochází – špatně zapájený průchod. QH' 595 jede i bez RCLK, takže další registry fungují. Zkontroluj RCLK a OE (pin 12 a 13) na všech 595.</td></tr>
+<tr><td>Jedna LED nesvítí</td><td>Průchod pod pouzdrem 595 nebo lištou – nahraď drátkem.</td></tr>
+<tr><td>Pendant nic nedělá v UGS</td><td>Chybí zkratky (kap. 7) nebo okno UGS není aktivní.</td></tr>
+<tr><td>Test píše nesmysly / Y a Z prohozené</td><td>Česká klávesnice – v <span class="f">pendant_test</span> je <code>QWERTZ = true</code>; zapni NumLock.</td></tr>
+<tr><td>Upload: <i>No drive to deploy</i></td><td>Postup s tlačítkem BOOTSEL (kap. 6).</td></tr>
+<tr><td>Krok / rychlost LED bliká</td><td>Přetečení fronty kláves – nastav hodnotu znovu.</td></tr>
+<tr><td>Vřeteno se při izolaci neroztočí</td><td>Program má <code>M03</code> bez S – pošli <code>M3 S12000</code> předem (kap. 4).</td></tr>
+<tr><td>Druhá strana desky A nesedí</td><td>Deska otočená přes špatnou osu – musí se otočit přes <b>vodorovnou</b> osu (horní hrana dolů).</td></tr>
+<tr><td>Laser pálí při přejezdech</td><td>GRBL není v laserovém režimu – <code>$32=1</code>.</td></tr>
+</table>
+
+<h3>Licence</h3><p>Hardware, mechanika a dokumentace: <b>CC BY-SA 4.0</b> (soubor <span class="f">LICENSE</span>). Firmware: <b>MIT</b> (<span class="f">06_firmware_Arduino/LICENSE</span>). Můžeš to volně používat, upravovat i sdílet – jen uveď autora a úpravy hardwaru/dokumentace sdílej pod stejnou licencí.</p>
+<div class="box ok"><b>Ověřený stav:</b> deska A – testy všech 21 tlačítek a 19 LED prošly; zkratky UGS jsou zapsané v PC; pálení čela je odzkoušené. <b>Neověřeno na hardwaru:</b> firmware v11 (prošel simulací), tištěné sloupky a knoflík.</div>
+
+</main></body></html>

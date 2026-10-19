@@ -1,0 +1,34 @@
+﻿Deska;Počet;Součástka;Hodnota / typ;Pouzdro;Označení;Poznámka
+A horní;21;Tlačítko;6×6 mm THT;SW_PUSH_6mm;SW1–SW21;výška podle panelu (v modelu 6×6×6 + hmatník)
+A horní;21;Dioda;1N4148W;SOD-123;D1–D21;jedna u každého tlačítka (matice 3×7)
+A horní;3;Posuvný registr;74HC595;SOIC-16;U4–U6;LED: U4 krok XY, U5 rychlost, U6 krok Z + osy
+A horní;3;Kondenzátor;100n;0805;C40–C42;blokování 595
+A horní;1;Kondenzátor;10u;0805;C43;
+A horní;1;Rezistor;10k;0805;R50;pull-up OE
+A horní;1;Kolíková lišta;1×6;2,54 mm;J1;LED signály → B (J101)
+A horní;1;Kolíková lišta;1×10;2,54 mm;J2;tlačítka (řádky/sloupce) → B (J103)
+A horní;1;Kolíková lišta;1×12 bez pinů 2 a 6;2,54 mm;J3;→ C (J301)
+A horní;1;Kolíková lišta;1×10;2,54 mm;J4;→ C (J302)
+B spodní;1;Mikrokontrolér;Laskakit Ultimate Pi Pico RP2040;2×20, rozteč řad 17,78;U101;
+B spodní;1;Rotační enkodér;EC11E s tlačítkem, osa 6 mm (D);EC11E vertical;SW101;osa musí projít deskou A a panelem
+B spodní;7;Rezistor;10k;0805;R102–R108;pull-up sloupců matice
+B spodní;9;Kondenzátor;10n;0805;C101,C102,C106–C112;filtr sloupců + enkodér
+B spodní;2;Kondenzátor;100n;0805;C103,C105;
+B spodní;1;Kondenzátor;10u;0805;C104;
+B spodní;1;Dutinková lišta;1×6;2,54 mm;J101;← A (J1)
+B spodní;1;Dutinková lišta;1×10;2,54 mm;J103;← A (J2)
+C LED;19;LED;0603 (barva dle výběru);0603;LED1–LED19;osy 3, krok XY 6, krok Z 4, rychlost 6
+C LED;1;Rezistor;330 Ω;0603;R301;skupina OSA
+C LED;3;Rezistor;820 Ω;0603;R302–R304;skupiny XY, Z, rychlost (viz pendant_LED_odpory.xlsx)
+C LED;1;Lišta;1×12 bez pinů 2 a 6;2,54 mm;J301;← A (J3)
+C LED;1;Lišta;1×10;2,54 mm;J302;← A (J4)
+Mechanika;1;Krabička;3D tisk;CNCpendant.step;;
+Mechanika;4;Distanční sloupek B→A;šestihran 5,5 × 11 mm, 3D tisk;distance_B-A_11mm_SESTIHRAN_5_5.stl;;otvor 2,6 – šroub se zařízne
+Mechanika;4;Distanční sloupek A→panel;Ø6 × 3,5 mm, 3D tisk;distance_A-panel_3_5mm.stl;;
+Mechanika;4;Šroub;M3×10 (válcová/zápustná);;;zespodu přes dno a desku B do sloupku
+Mechanika;4;Šroub;M3×10 ISO 7380 (půlkulatá hlava);;;shora přes panel do sloupku
+Mechanika;1;Panel;hliník 1 mm, 95×65, R4, černě lakovaný;;;frézovat + vypálit laserem
+Mechanika;1;Knoflík;Ø25, 3D tisk;knoflik_*.stl;;výšku vybrat podle délky osy
+Mechanika;1;Kabel;USB-C – USB-A/C;;;k PC s UGS
+Výroba DPS;3;Cuprextit;jednostranný/oboustranný, polotovar 100×70;;;A oboustranný, B a C jednostranný
+Výroba DPS;4;Kolíček;Ø2,5 mm (ocelový);;;do přípravku – registrace DPS
