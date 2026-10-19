@@ -1,0 +1,16 @@
+name: Kontrola DPS
+on:
+  push:
+    paths: ['01_DPS_KiCad/**', '02_DPS_frezovani/**', '03_pripravek_MDF/vrtani_DPS/**', 'nastroje/**']
+  pull_request:
+  workflow_dispatch:
+jobs:
+  kontrola:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy scipy pillow matplotlib
+      - run: python nastroje/kontrola.py

@@ -74,6 +74,7 @@ All boards were cross-checked against the KiCad files (schematic ↔ PCB, Gerber
 | `06_firmware_Arduino` | `cnc_pendant_v11` (recommended), `cnc_pendant` v10, test sketches |
 | `07_UGS_zkratky` | 34 UGS keymap files (`.shadow`) |
 | `08_soupiska_BOM` | BOM, LED resistor calculation |
+| `nastroje` | Python tools: full PCB/G-code check (`kontrola.py`), board image renderer |
 
 ## Quick start
 
@@ -103,7 +104,12 @@ All boards were cross-checked against the KiCad files (schematic ↔ PCB, Gerber
 
 Other senders: anything that lets you bind keyboard shortcuts can use the pendant – only the keymap changes.
 
-## Status
+## Project status
+
+**v1.0 – completed and archived (October 2026).** The project is kept ready for future changes:
+see [`STAV_PROJEKTU.md`](STAV_PROJEKTU.md) (how to modify and re-check everything, open items, ideas) and [`CHANGELOG.md`](CHANGELOG.md).
+After any PCB change run `python nastroje/kontrola.py` – it re-checks schematic ↔ PCB, DRC, Gerbers, isolation G-code and drills.
+
 
 - The pendant is built and working (see photos): all 21 buttons and 19 LEDs tested, UGS keymap tested, laser-engraved panel done.
 - Firmware **v11** passed host simulation but is **not yet tested on hardware** – v10 is the fallback.
